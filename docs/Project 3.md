@@ -117,6 +117,8 @@ Trong phần này, sinh viên sẽ thực hiện các yêu cầu sau:
 
 Lưu ý: Cần ghi rõ thông tin liên quan đến mã nguồn (chẳng hạn như loại ngôn ngữ lập trình, các thư viện cần cài đặt, cách thức biên dịch, cách thức chạy) và video demo (chẳng hạn như nơi tải lên) trong báo cáo.
 
+Xem báo cáo chi tiết trong file: `Part3_Report.md`
+
 ## 4 (3 điểm) Tìm hiểu về chữ ký điện tử RSA của OpenSSL
 
 ### 4.1 Mô tả
