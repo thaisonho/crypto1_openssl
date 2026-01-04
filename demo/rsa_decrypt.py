@@ -12,15 +12,6 @@ from cryptography.hazmat.backends import default_backend
 
 
 def load_private_key(priv_key_file):
-    """
-    Đọc khóa bí mật từ file PEM
-    
-    Args:
-        priv_key_file: Đường dẫn đến file chứa khóa bí mật
-        
-    Returns:
-        Đối tượng RSAPrivateKey
-    """
     try:
         with open(priv_key_file, 'rb') as f:
             private_key = serialization.load_pem_private_key(
@@ -35,14 +26,6 @@ def load_private_key(priv_key_file):
 
 
 def decrypt_file(private_key, cipher_file, plain_file):
-    """
-    Giải mã file bản mã sử dụng khóa bí mật RSA
-    
-    Args:
-        private_key: Đối tượng RSAPrivateKey
-        cipher_file: Đường dẫn đến file bản mã
-        plain_file: Đường dẫn đến file bản rõ đầu ra
-    """
     try:
         # Đọc bản mã
         with open(cipher_file, 'rb') as f:

@@ -12,15 +12,6 @@ from cryptography.hazmat.backends import default_backend
 
 
 def load_public_key(pub_key_file):
-    """
-    Đọc khóa công khai từ file PEM
-    
-    Args:
-        pub_key_file: Đường dẫn đến file chứa khóa công khai
-        
-    Returns:
-        Đối tượng RSAPublicKey
-    """
     try:
         with open(pub_key_file, 'rb') as f:
             public_key = serialization.load_pem_public_key(
@@ -34,14 +25,6 @@ def load_public_key(pub_key_file):
 
 
 def encrypt_file(public_key, plain_file, cipher_file):
-    """
-    Mã hóa file bản rõ sử dụng khóa công khai RSA
-    
-    Args:
-        public_key: Đối tượng RSAPublicKey
-        plain_file: Đường dẫn đến file bản rõ
-        cipher_file: Đường dẫn đến file bản mã đầu ra
-    """
     try:
         # Đọc bản rõ
         with open(plain_file, 'rb') as f:
