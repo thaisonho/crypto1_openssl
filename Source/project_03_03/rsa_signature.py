@@ -23,7 +23,6 @@ from cryptography.exceptions import InvalidSignature
 
 
 def load_private_key(filepath):
-    """Load RSA private key from PEM file"""
     with open(filepath, 'rb') as f:
         private_key = serialization.load_pem_private_key(
             f.read(),
@@ -36,7 +35,6 @@ def load_private_key(filepath):
 
 
 def load_public_key(filepath):
-    """Load RSA public key from PEM file"""
     with open(filepath, 'rb') as f:
         public_key = serialization.load_pem_public_key(
             f.read(),
@@ -48,13 +46,7 @@ def load_public_key(filepath):
 
 
 def sign_message_raw(private_key, message):
-    from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15
-    
-    # For raw RSA signing (like pkeyutl), we use the private key operation
-    # which is mathematically: m^d mod n
-    # The cryptography library's sign() always requires a hash algorithm,
-    # so we use the underlying RSA operation via _raw_private_key_op
-    
+    from cryptography.hazmat.primitives.asymmetric.padding import PKCS1v15 
     # Get key size in bytes
     key_size_bytes = (private_key.key_size + 7) // 8
     
@@ -64,7 +56,6 @@ def sign_message_raw(private_key, message):
     if len(message) > max_message_len:
         raise ValueError(f"Message too long for raw RSA signing. Max: {max_message_len} bytes, Got: {len(message)} bytes")
     
-    # Apply PKCS#1 v1.5 type 1 padding (for signing)
     padding_length = key_size_bytes - len(message) - 3
     padded = bytes([0x00, 0x01]) + bytes([0xFF] * padding_length) + bytes([0x00]) + message
     
@@ -104,16 +95,14 @@ def verify_signature_raw(public_key, message, signature):
         # Convert back to bytes
         decrypted = decrypted_int.to_bytes(key_size_bytes, 'big')
         
-        # Check PKCS#1 v1.5 type 1 padding: 0x00 0x01 [0xFF padding] 0x00 [message]
+        # Check PKCS#1 v1.5 type 1 padding
         if decrypted[0:2] != bytes([0x00, 0x01]):
             return False
         
-        # Find the 0x00 separator
         separator_idx = decrypted.find(bytes([0x00]), 2)
         if separator_idx == -1:
             return False
         
-        # Check padding is all 0xFF
         padding_bytes = decrypted[2:separator_idx]
         if not all(b == 0xFF for b in padding_bytes):
             return False
@@ -157,7 +146,7 @@ def do_sign(args):
         print(f"Error reading message file: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # Sign the message (raw RSA)
+    # Sign the message
     try:
         signature = sign_message_raw(private_key, message)
         print(f"Generated signature ({len(signature)} bytes)")
@@ -220,7 +209,7 @@ def do_verify(args):
         print(f"Error reading signature file: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # Verify signature (raw RSA)
+    # Verify signature
     print("\n" + "="*50)
     if verify_signature_raw(public_key, message, signature):
         print("Signature Verified Successfully")
