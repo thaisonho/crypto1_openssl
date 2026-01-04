@@ -52,14 +52,12 @@ Trong đó:
     % Các khối
     \node[block, minimum width=1cm, fill=gray!20] (b1) at (0,0) {\texttt{0x00}};
     \node[block, minimum width=1cm, fill=blue!20, right=0pt of b1] (b2) {\texttt{0x02}};
-    \node[block, minimum width=4cm, fill=yellow!30, right=0pt of b2] (ps) {PS (random bytes $\geq$ 8)};
+    \node[block, minimum width=4cm, fill=yellow!30, right=0pt of b2] (ps) {PS (random $\geq$ 8 bytes)};
     \node[block, minimum width=1cm, fill=gray!20, right=0pt of ps] (sep) {\texttt{0x00}};
     \node[block, minimum width=3cm, fill=green!20, right=0pt of sep] (m) {M (plaintext)};
     
-    % Mũi tên và nhãn tổng thể
-    \draw[decorate, decoration={brace, amplitude=5pt, raise=3pt}] 
-        (b1.north west) -- (m.north east) 
-        node[midway, above=8pt] {EM = $k$ bytes (bằng kích thước khóa)};
+    % Nhãn tổng thể
+    \node[above=0.5cm of ps] {EM = $k$ bytes (bằng kích thước khóa)};
     \end{tikzpicture}
     \caption{Cấu trúc khối tin nhắn PKCS\#1 v1.5 cho mã hóa RSA}
     \label{fig:pkcs1_structure}
@@ -114,7 +112,7 @@ OpenSSL thực hiện các bước sau:
         font=\small,
         node distance=0.8cm,
         process/.style={draw, rectangle, rounded corners, minimum width=3.5cm, minimum height=0.8cm, align=center},
-        io/.style={draw, trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=2.5cm, minimum height=0.6cm, align=center},
+        io/.style={draw, rectangle, rounded corners=8pt, minimum width=2.8cm, minimum height=0.7cm, align=center},
         arrow/.style={-Stealth, thick},
     ]
     % Encryption flow
@@ -171,11 +169,11 @@ Thuật toán \ref{alg:rsa_encrypt} mô tả quy trình mã hóa RSA được hi
     \State cipherBlocks $\gets$ []
     \For{$i \gets 0$ \textbf{to} len(plaintext) \textbf{step} maxBlockSize}
         \State block $\gets$ plaintext[$i$ : $i +$ maxBlockSize]
-        \State cipherBlock $\gets$ publicKey.\Call{encrypt}{block, PKCS1v15()}
-        \State cipherBlocks.\Call{append}{cipherBlock}
+        \State cipherBlock $\gets$ publicKey.encrypt(block, PKCS1v15())
+        \State cipherBlocks.append(cipherBlock)
     \EndFor
     
-    \State \Call{WriteFile}{cipherFile, \Call{concat}{cipherBlocks}}
+    \State \Call{WriteFile}{cipherFile, Concat(cipherBlocks)}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
@@ -200,11 +198,11 @@ Thuật toán \ref{alg:rsa_decrypt} mô tả quy trình giải mã RSA được 
     \State plaintextBlocks $\gets$ []
     \For{$i \gets 0$ \textbf{to} numBlocks $-$ 1}
         \State block $\gets$ ciphertext[$i \times$ blockSize : $(i+1) \times$ blockSize]
-        \State plainBlock $\gets$ privateKey.\Call{decrypt}{block, PKCS1v15()}
-        \State plaintextBlocks.\Call{append}{plainBlock}
+        \State plainBlock $\gets$ privateKey.decrypt(block, PKCS1v15())
+        \State plaintextBlocks.append(plainBlock)
     \EndFor
     
-    \State \Call{WriteFile}{plainFile, \Call{concat}{plaintextBlocks}}
+    \State \Call{WriteFile}{plainFile, Concat(plaintextBlocks)}
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
