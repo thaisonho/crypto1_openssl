@@ -254,7 +254,7 @@ Vi du:
             print(f"\n[So sanh]")
             n_match = priv_components['n'] == pub_components['n']
             e_match = priv_components['e'] == pub_components['e']
-            print(f"\t{'OK' if n_match else 'FAIL'} - Modulus (n) giong nhau")
+            print(f"\t{'OK' if n_match else 'FAIL'} - Modulo (n) giong nhau")
             print(f"\t{'OK' if e_match else 'FAIL'} - Public exponent (e) giong nhau")
             
         except Exception as e:
