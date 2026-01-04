@@ -4,46 +4,15 @@
 
 Phần này chứa các chương trình mã hóa và giải mã RSA tương thích với OpenSSL.
 
-## Cấu trúc thư mục
-
-```
-Bai_2/
-├── rsa_encrypt.py    # Chương trình mã hóa RSA
-├── rsa_decrypt.py    # Chương trình giải mã RSA
-├── priv.pem          # Khóa bí mật RSA (2048-bit)
-├── pub.pem           # Khóa công khai RSA
-├── plain             # File bản rõ mẫu
-├── cipher            # File bản mã (đã được mã hóa)
-└── README.md         # File hướng dẫn này
-```
-
-## Yêu cầu cài đặt
-
-- Python 3.x
-- Thư viện `cryptography`:
-  ```bash
-  pip install cryptography
-  ```
-
 ## Cách sử dụng
 
 ### 1. Mã hóa RSA
-
-```bash
-python rsa_encrypt.py <pub.pem> <plain> <cipher>
-```
-
 Ví dụ:
 ```bash
 python rsa_encrypt.py pub.pem plain cipher_output
 ```
 
 ### 2. Giải mã RSA
-
-```bash
-python rsa_decrypt.py <priv.pem> <cipher> <plain>
-```
-
 Ví dụ:
 ```bash
 python rsa_decrypt.py priv.pem cipher plain_output
@@ -58,15 +27,6 @@ openssl genpkey -out priv.pem -algorithm RSA -pkeyopt rsa_keygen_bits:2048
 
 # Tạo khóa công khai từ khóa bí mật
 openssl pkey -in priv.pem -out pub.pem -pubout
-```
-
-### Mã hóa và giải mã với OpenSSL
-```bash
-# Mã hóa bản rõ
-openssl pkeyutl -in plain -out cipher -inkey pub.pem -pubin -encrypt
-
-# Giải mã bản mã
-openssl pkeyutl -in cipher -out plain_decrypted -inkey priv.pem -decrypt
 ```
 
 ## Kiểm tra tương thích
